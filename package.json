@@ -1,0 +1,66 @@
+{
+  "name": "formini",
+  "version": "0.0.0-beta.0",
+  "description": "表单微核心",
+  "main": "dist/index.js",
+  "unpkg": "dist/index.umd.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "dumi dev",
+    "start": "dumi dev",
+    "build": "npm run clean:build && father-build",
+    "build:doc": "npm run build && dumi build",
+    "format": "prettier --write \"./**/*.{js,ts,jsx,tsx,json,css,scss,sass,less,html}\"",
+    "clean:build": "rimraf dist",
+    "release": "npm run release:beta",
+    "release:latest": "npm run build && np --no-cleanup --yolo --no-publish --tag=latest && npm publish",
+    "release:beta": "npm run build && np --no-cleanup --yolo --no-publish --tag=beta && npm publish"
+  },
+  "homepage": "https://github.com/CJY0208/formini",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CJY0208/formini.git"
+  },
+  "author": "CJY0208",
+  "license": "ISC",
+  "devDependencies": {
+    "@commitlint/cli": "^12.0.1",
+    "@commitlint/config-conventional": "^12.0.1",
+    "dumi": "^1.1.10",
+    "eslint": "^7.23.0",
+    "father-build": "^1.19.2",
+    "husky": "^4.x",
+    "lint-staged": "^10.5.4",
+    "np": "^7.4.0",
+    "prettier": "^2.2.1",
+    "rimraf": "^3.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js,ts,jsx,tsx,json,css,scss,sass,less,html,md}": [
+      "prettier --write"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {}
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "@vue/reactivity": "^3.1.5"
+  }
+}
