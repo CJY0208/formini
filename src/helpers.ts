@@ -32,7 +32,7 @@ export const debounce = (func, wait?) => {
 export const arr2map = (arr, mapper?: Mapper) =>
   applyFunction(
     objectAssign,
-    concat([], (arr || []).map(mapper || defaultMapper))
+    concat({}, (arr || []).map(mapper || defaultMapper))
   )
 
 export const mapObject = (obj, mapper?: Mapper) =>

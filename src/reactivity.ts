@@ -115,22 +115,24 @@ export const reactive = (obj) => {
       return prop in obj
     },
     set(obj, prop, value) {
+      const changed = value !== obj[prop]
       // console.log(`set ${prop} to ${value}`)
 
-      if (value !== obj[prop]) {
+      obj[prop] = value
+
+      if (changed) {
         emitChangeEvent(prop)
       }
-
-      obj[prop] = value
 
       return true
     },
     deleteProperty(obj, prop) {
-      if (prop in obj) {
+      const changed = prop in obj
+      delete obj[prop]
+
+      if (changed) {
         emitChangeEvent(prop)
       }
-
-      delete obj[prop]
 
       return true
     },
