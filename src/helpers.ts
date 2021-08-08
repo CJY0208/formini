@@ -2,9 +2,7 @@ import { reactive } from './reactivity'
 
 const defaultMapper = () => ({})
 
-type Mapper = (
-  ...args: any[]
-) => {
+type Mapper = (...args: any[]) => {
   [key: string]: any
 }
 
@@ -80,7 +78,9 @@ export const createEventBus = () => {
     },
     emit(event, value?) {
       const collection = getCollection(event)
-      concat(collection.values()).forEach((listener) => listener(value))
+      Array.from(collection.values()).forEach((listener: any) =>
+        listener(value)
+      )
     },
   }
 }
