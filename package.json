@@ -17,8 +17,8 @@
     "format": "prettier --write \"./**/*.{js,ts,jsx,tsx,json,css,scss,sass,less,html}\"",
     "clean:build": "rimraf dist",
     "release": "npm run release:beta",
-    "release:latest": "npm run build && np --no-cleanup --yolo --no-publish --tag=latest && npm publish",
-    "release:beta": "npm run build && np --no-cleanup --yolo --no-publish --tag=beta && npm publish"
+    "release:latest": "npm run build && np --no-cleanup --yolo --no-publish --tag=latest && npm publish --registry https://registry.npmjs.org",
+    "release:beta": "npm run build && np --no-cleanup --yolo --no-publish --tag=beta && npm publish --registry https://registry.npmjs.org"
   },
   "homepage": "https://github.com/CJY0208/formini",
   "repository": {
