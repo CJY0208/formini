@@ -139,11 +139,11 @@ export const reactive = (obj) => {
   return reactiveObj
 }
 
-Object.assign(window, {
-  reactive,
-  computed,
-  watch,
-})
+// Object.assign(window, {
+//   reactive,
+//   computed,
+//   watch,
+// })
 
 // var obj = reactive({ a: 1, b: 1, c: 4, d: 5 })
 // var aa = computed(() => obj.a * 10)
