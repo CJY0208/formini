@@ -1,6 +1,6 @@
 {
   "name": "formini",
-  "version": "0.0.0-beta.3",
+  "version": "0.0.0-beta.4",
   "description": "form core with vanilla js",
   "main": "dist/index.js",
   "unpkg": "dist/index.umd.js",
