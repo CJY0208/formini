@@ -2,12 +2,14 @@ import { createEventBus, objectAssign } from './helpers'
 
 const eventBus = createEventBus()
 const collection = new Set()
+const reactiveMap = new Map()
 
 const depend = (effect) => {
   collection.clear()
   const res = effect()
   const dependKeys = Array.from(collection.values())
   collection.clear()
+  // console.log(dependKeys)
   return [res, dependKeys]
 }
 
@@ -21,6 +23,7 @@ export const watch = (watcher, callback, lazy?) => {
     }
 
     listenerMap[eventKey] = eventBus.on(eventKey, () => {
+      // console.log('on event', eventKey)
       canTrigger = true
       if (!lazy) {
         trigger()
@@ -29,12 +32,14 @@ export const watch = (watcher, callback, lazy?) => {
   }
 
   function effect() {
-    if (watcher._isReactive) {
-      updateDependKey(watcher._key)
+    if (reactiveMap.has(watcher)) {
+      updateDependKey(reactiveMap.get(watcher))
       return watcher
     }
 
-    const [value, dependKeys] = depend(watcher)
+    const dependConfig = depend(watcher)
+    const value = dependConfig[0]
+    const dependKeys = dependConfig[1]
     dependKeys.forEach(updateDependKey)
     return value
   }
@@ -43,7 +48,7 @@ export const watch = (watcher, callback, lazy?) => {
     if (!canTrigger) {
       return currentValue
     }
-    console.log('compute 了')
+    // console.log('compute 了')
 
     const value = effect()
     currentValue = value
@@ -91,50 +96,64 @@ const getRandomEventKey = () => Math.floor(Math.random() * 100000)
 
 export const reactive = (obj) => {
   const objEventKey = getRandomEventKey()
-  const reactiveObj = new Proxy(
-    objectAssign(
-      {
-        _isReactive: true,
-        _key: objEventKey,
-      },
-      obj
-    ),
-    {
-      get(obj, prop) {
-        console.log('get 了')
-        collection.add(`${objEventKey}:${String(prop)}`)
-        return obj[prop]
-      },
-      set(obj, prop, value) {
-        if (value === obj[prop]) {
-          return obj[prop]
-        }
+  const addEventCollection = (prop) => {
+    collection.add(`${objEventKey}:${String(prop)}`)
+  }
+  const emitChangeEvent = (prop) => {
+    eventBus.emit(`${objEventKey}:${String(prop)}`)
+    eventBus.emit(objEventKey)
+  }
+  const reactiveObj = new Proxy(objectAssign({}, obj), {
+    get(obj, prop) {
+      // console.log(`get ${prop}`)
+      addEventCollection(prop)
+      return obj[prop]
+    },
+    has(obj, prop) {
+      // console.log(`check has ${prop}`)
+      addEventCollection(prop)
+      return prop in obj
+    },
+    set(obj, prop, value) {
+      // console.log(`set ${prop} to ${value}`)
 
-        console.log('set 了')
-        obj[prop] = value
-        eventBus.emit(`${objEventKey}:${String(prop)}`, value)
-        eventBus.emit(objEventKey)
-        return value
-      },
-      has(obj, prop) {
-        console.log('has 了')
-        collection.add(`${objEventKey}:${String(prop)}`)
-        return prop in obj
-      },
-    }
-  )
+      if (value !== obj[prop]) {
+        emitChangeEvent(prop)
+      }
+
+      obj[prop] = value
+
+      return true
+    },
+    deleteProperty(obj, prop) {
+      if (prop in obj) {
+        emitChangeEvent(prop)
+      }
+
+      delete obj[prop]
+
+      return true
+    },
+  })
+  reactiveMap.set(reactiveObj, objEventKey)
   return reactiveObj
 }
 
-// const obj = reactive({ a: 1, b: 1, c: 4, d: 5 })
-// const aa = computed(() => obj.a * 10)
-// const bb = computed(() => obj.b * 10, true)
-// const stopC = watch(
+Object.assign(window, {
+  reactive,
+  computed,
+  watch,
+})
+
+// var obj = reactive({ a: 1, b: 1, c: 4, d: 5 })
+// var aa = computed(() => obj.a * 10)
+// var bb = computed(() => obj.b * 10, true)
+// var stopC = watch(
 //   () => obj.c,
 //   () => {
 //     console.log(obj.c)
 //   }
 // )
-// const stop = watch(obj, () => {
-//   console.log('obj 更新了')
+// var stop = watch(obj, () => {
+// console.log('obj 更新了')
 // })

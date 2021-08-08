@@ -59,7 +59,7 @@ export default function createForm(formOptions?: FormOptions) {
     const setValues = (update) => setReactivityData(values, update || {})
     const watchValues = (listener, options?: WatchOptions) =>
       watchReactivity(
-        getValues,
+        values,
         getEventListener(listener, (options || {}).debounce)
       )
     const watchValue = (key, listener, options?: WatchOptions) =>
@@ -136,7 +136,7 @@ export default function createForm(formOptions?: FormOptions) {
           triggerRelativesChange()
 
           return nextValue
-        })
+        }, true)
       )
     ) || {}
   let currentRelativeConfigs = objectAssign({}, initialRelativeConfigs)
