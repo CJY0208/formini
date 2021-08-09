@@ -1,5 +1,9 @@
 # Formini
 
+[![size](https://img.shields.io/bundlephobia/minzip/formini@latest.svg)](https://bundlephobia.com/result?p=formini@latest)
+![](https://visitor-badge.glitch.me/badge?page_id=cjy0208.formini)
+<!-- [![dm](https://img.shields.io/npm/dm/formini.svg)](https://github.com/CJY0208/formini) -->
+
 纯 js 表单核心
 
 ## 使用方式
@@ -35,7 +39,6 @@ const form = createForm({
 // 取值与校验
 form.setValue('key1', undefined)
 await form.validate('key1')
-
 form.getError('key1') // key1 必填
 
 // 监听
