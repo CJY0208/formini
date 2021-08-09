@@ -39,15 +39,27 @@ const form = createForm({
   },
 })
 
-// 取值与校验
+// 写值与校验
+form.setValue({
+  key1: undefined
+})
+await form.validate()
+form.getErrors() // { key1: 'key1 必填', key2: undefined, key3: 'key3 必填' }
+
+// 定向写值与校验
 form.setValue('key1', undefined)
 await form.validate('key1')
 form.getError('key1') // key1 必填
 
-// 监听
+// 监听全部 values
+form.watchValues((values) => {
+  console.log(values)
+})
 form.watchValue('key1', (value) => {
   console.log(value)
 })
+
+// 监听 errors
 form.watchError('key1', (value) => {
   console.log(value)
 })
