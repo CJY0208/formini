@@ -123,7 +123,7 @@ export default function createForm(formOptions?: FormOptions) {
 
   // +++++++++++++++++++++++ relatives 相关 begin ++++++++++++++++++++++++++++
   const eventBus = createEventBus()
-  const triggerRelativesChange = debounce(() => eventBus.emit(RELATIVE_CHANGE))
+  const triggerRelativesChange = debounce(() => eventBus.emit(RELATIVE_CHANGE, getRelatives()))
   const buildRelatives = (configs) =>
     mapObject(configs, (key, compute) =>
       defineProperty(
