@@ -6,6 +6,16 @@
 
 纯 js 表单核心
 
+[在线示例](https://codesandbox.io/s/formini-vue3-demo-cc984)
+
+## 安装
+
+```bash
+npm install formini --save
+# or
+yarn add formini
+```
+
 ## 使用方式
 
 ```js
@@ -45,6 +55,9 @@ form.setValue({
 })
 await form.validate()
 form.getErrors() // { key1: 'key1 必填', key2: undefined, key3: 'key3 必填' }
+
+// 重置
+form.reset()
 
 // 定向写值与校验
 form.setValue('key1', undefined)
