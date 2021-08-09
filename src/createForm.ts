@@ -124,6 +124,7 @@ export default function createForm(formOptions?: FormOptions) {
   // +++++++++++++++++++++++ relatives 相关 begin ++++++++++++++++++++++++++++
   const eventBus = createEventBus()
   const triggerRelativesChange = debounce(() => eventBus.emit(RELATIVE_CHANGE, getRelatives()))
+  const currentRelatives = {}
   const buildRelatives = (configs) =>
     mapObject(configs, (key, compute) =>
       defineProperty(
@@ -131,9 +132,13 @@ export default function createForm(formOptions?: FormOptions) {
         key,
         computed(() => {
           // console.log('compute key:', key)
+          const currentRelative = currentRelatives[key]
           const nextValue = compute(values, errors)
-          eventBus.emit(`${RELATIVE_CHANGE}:${key}`, nextValue)
-          triggerRelativesChange()
+          if (nextValue !== currentRelative) {
+            eventBus.emit(`${RELATIVE_CHANGE}:${key}`, nextValue)
+            triggerRelativesChange()
+          }
+          currentRelatives[key] = nextValue
 
           return nextValue
         }, true)
@@ -141,7 +146,7 @@ export default function createForm(formOptions?: FormOptions) {
     ) || {}
   let currentRelativeConfigs = objectAssign({}, initialRelativeConfigs)
   let relatives = buildRelatives(currentRelativeConfigs)
-  const getRelative = (name) => (relatives[name] || {}).value
+  const getRelative = (key) => (relatives[key] || {}).value
   const getRelatives = () =>
     mapObject(relatives, (key, relative) =>
       defineProperty({}, key, relative.value)
