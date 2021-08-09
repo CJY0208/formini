@@ -232,6 +232,12 @@ export default function createForm(formOptions?: FormOptions) {
       return valid
     })
   }
+  
+  const reset = () => {
+    const fieldsData = getFieldsData(fields)
+    setValues(fieldsData.values)
+    setErrors(fieldsData.errors)
+  }
   // ----------------------- 其他 ----------------------------
 
   return {
@@ -264,5 +270,6 @@ export default function createForm(formOptions?: FormOptions) {
 
     watch,
     validate,
+    reset,
   }
 }
