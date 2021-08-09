@@ -1,5 +1,3 @@
-import { reactive } from './reactivity'
-
 const defaultMapper = () => ({})
 
 type Mapper = (...args: any[]) => {
@@ -54,8 +52,8 @@ export const fields2map = (fields, getFieldValue) =>
 export const getFieldsData = (fields) => ({
   keys: fields.map((field) => field.name),
   allRules: fields2map(fields, (field) => field.rules),
-  values: reactive(fields2map(fields, (field) => field.defaultValue)),
-  errors: reactive(fields2map(fields, () => undefined)),
+  values: fields2map(fields, (field) => field.defaultValue),
+  errors: fields2map(fields, () => undefined),
 })
 
 export const getEventListener = (listener, debounceDelay?) => {
