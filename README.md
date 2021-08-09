@@ -4,7 +4,7 @@
 ![](https://visitor-badge.glitch.me/badge?page_id=cjy0208.formini)
 <!-- [![dm](https://img.shields.io/npm/dm/formini.svg)](https://github.com/CJY0208/formini) -->
 
-纯 js 表单核心
+纯 js 迷你表单核心，包含值管理与简单的错误校验，且基于 Proxy 实现表单关联功能
 
 [在线示例](https://codesandbox.io/s/formini-vue3-demo-cc984)
 
