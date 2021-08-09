@@ -28,11 +28,14 @@ const form = createForm({
       ],
     },
   ],
-  // 关联参数，可用作表单项关联控制
+  // 关联参数，基于 Proxy 响应式数据自动收集依赖，定向更新
   relatives: {
     hasKey1: (values) => typeof values.key1 !== 'undefined',
     hasKey2: (values) => 'key2' in values,
     hasKey5: (values) => 'key5' in values,
+    hasError: (values, errors) => Object.values(errors).some(Boolean),
+    // 可用作表单项关联控制
+    showField2: (values) => values.key1 === 'magic'
   },
 })
 
