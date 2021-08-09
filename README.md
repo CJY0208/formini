@@ -56,27 +56,35 @@ form.setValue({
 await form.validate()
 form.getErrors() // { key1: 'key1 必填', key2: undefined, key3: 'key3 必填' }
 
-// 重置
-form.reset()
+form.reset() // 重置
 
 // 定向写值与校验
 form.setValue('key1', undefined)
 await form.validate('key1')
 form.getError('key1') // key1 必填
 
-// 监听全部 values
-form.watchValues((values) => {
+const stop0 = form.watch(() => { // 监听 form 的所有变化，包括 values、errors、relatives
+  console.log('form 发生了变化')
+})
+
+const stop1 = form.watchValues((values) => { // 监听全部 values
   console.log(values)
 })
-form.watchValue('key1', (value) => {
+const stop2 = form.watchValue('key1', (value) => { // 监听指定 value
   console.log(value)
 })
 
-// 监听 errors
-form.watchError('key1', (value) => {
-  console.log(value)
+const stop3 = form.watchErrors((errors) => { // 监听全部 errors
+  console.log(errors)
 })
-form.watchRelative(relativeName, (relative) => {
+const stop4 = form.watchError('key1', (error) => { // 监听指定 error
+  console.log(error)
+})
+
+const stop5 = form.watchRelatives((relatives) => { // 监听全部 relatives（关联）
+  console.log(relatives)
+})
+const stop6 = form.watchRelative('hasKey1', (relative) => { // 监听指定 relative（关联）
   console.log(relative)
 })
 ```
