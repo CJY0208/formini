@@ -34,6 +34,7 @@ export const watch = (watcher, callback, lazy?) => {
   function effect() {
     if (reactiveMap.has(watcher)) {
       updateDependKey(reactiveMap.get(watcher))
+      currentValue = watcher
       return watcher
     }
 
@@ -41,6 +42,7 @@ export const watch = (watcher, callback, lazy?) => {
     const value = dependConfig[0]
     const dependKeys = dependConfig[1]
     dependKeys.forEach(updateDependKey)
+    currentValue = value
     return value
   }
 
@@ -51,7 +53,6 @@ export const watch = (watcher, callback, lazy?) => {
     // console.log('compute 了')
 
     const value = effect()
-    currentValue = value
     callback(value)
     canTrigger = false
     return value
@@ -61,7 +62,7 @@ export const watch = (watcher, callback, lazy?) => {
     Object.values(listenerMap).forEach((stop: any) => stop())
   }
 
-  trigger()
+  effect()
 
   stop.trigger = trigger
 
