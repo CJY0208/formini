@@ -9,6 +9,7 @@
   "files": [
     "dist"
   ],
+  "sideEffects": false,
   "scripts": {
     "dev": "dumi dev",
     "start": "dumi dev",
@@ -58,6 +59,5 @@
       "@commitlint/config-conventional"
     ],
     "rules": {}
-  },
-  "sideEffects": false
+  }
 }
