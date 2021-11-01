@@ -45,7 +45,7 @@ export type ComputeRelative = (values: Values, errors: Errors) => Relative
 export interface Form {
   getValue: (name: string) => Value;
   getValues: () => Values;
-  setValue: (name: string) => void;
+  setValue: (name: string, value: Value) => void;
   setValues: (values: Values) => void;
   watchValues: (listener: (values: Values) => void, options?: WatchOptions) => StopWatch;
   watchValue: (name: string, listener: (value: Value) => void, options?: WatchOptions) => StopWatch;
