@@ -22,7 +22,7 @@ export type Rule = (value, values) => Promise<any> | any
 export interface Field {
   name: string
   defaultValue?: any
-  rules?: Rule
+  rules?: Rule[]
 }
 
 export interface FormOptions {
@@ -67,7 +67,7 @@ export interface Form {
   watchRelatives: (listener: (relatives: Relatives) => void, options?: WatchOptions) => StopWatch;
   watchRelative: (name: string, listener: (relative: Relative) => void, options?: WatchOptions) => StopWatch;
   watch: (listener: () => void) => StopWatch;
-  validate: (filedNames: string[]) => Promise<boolean>;
+  validate: (filedNames: string[] | string) => Promise<boolean>;
   reset: () => void;
 }
 
