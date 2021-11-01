@@ -61,7 +61,7 @@ export interface Form {
   addField: (field: Field) => () => void;
   getRelative: (name: string) => Relative;
   getRelatives: () => Relatives;
-  setRelatives: (configs: Record<string, ComputeRelative>) => Relatives;
+  setRelatives: (configs: Record<string, ComputeRelative>) => void;
   removeRelative: (name: string) => void;
   addRelative: (name: string, compute: ComputeRelative) => RemoveRelative;
   watchRelatives: (listener: (relatives: Relatives) => void, options?: WatchOptions) => StopWatch;
