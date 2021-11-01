@@ -50,7 +50,7 @@ export interface Form {
   watchValues: (listener: (values: Values) => void, options?: WatchOptions) => StopWatch;
   watchValue: (name: string, listener: (value: Value) => void, options?: WatchOptions) => StopWatch;
   getError: (name: string) => Error;
-  getErrors: (name: string) => Errors;
+  getErrors: () => Errors;
   setError: (name: string) => void;
   setErrors: (errors: Errors) => void;
   watchErrors: (listener: (errors: Errors) => void, options?: WatchOptions) => StopWatch;
