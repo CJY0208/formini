@@ -13,26 +13,65 @@ import {
 
 const RELATIVE_CHANGE = 'rc'
 
-interface WatchOptions {
+export interface WatchOptions {
   debounce?: number | boolean | false
 }
 
-type Rule = (value, values) => Promise<any> | any
+export type Rule = (value, values) => Promise<any> | any
 
-interface FieldConfig {
+export interface Field {
   name: string
   defaultValue?: any
   rules?: Rule
 }
 
-interface FormOptions {
-  fields?: FieldConfig[]
+export interface FormOptions {
+  fields?: Field[]
   relatives?: {
     [key: string]: (values, errors) => any
   }
 }
 
-export default function createForm(formOptions?: FormOptions) {
+export type StopWatch = () => void
+export type RemoveRelative = () => void
+export type Value = any
+export type Values = Record<string, Value>
+export type Error = any
+export type Errors = Record<string, Error>
+export type Relative = any
+export type Relatives = Record<string, Relative>
+export type ComputeRelative = (values: Values, errors: Errors) => Relative
+
+export interface Form {
+  getValue: (name: string) => Value;
+  getValues: () => Values;
+  setValue: (name: string) => void;
+  setValues: (values: Values) => void;
+  watchValues: (listener: (values: Values) => void, options?: WatchOptions) => StopWatch;
+  watchValue: (name: string, listener: (value: Value) => void, options?: WatchOptions) => StopWatch;
+  getError: (name: string) => Error;
+  getErrors: (name: string) => Errors;
+  setError: (name: string) => void;
+  setErrors: (errors: Errors) => void;
+  watchErrors: (listener: (errors: Errors) => void, options?: WatchOptions) => StopWatch;
+  watchError: (name: string, listener: (value: Value) => void, options?: WatchOptions) => StopWatch;
+  getFields: () => FormOptions['fields'];
+  setFields: (nextFields: FormOptions['fields']) => void;
+  removeField: (fieldName: string) => void;
+  addField: (field: Field) => () => void;
+  getRelative: (name: string) => Relative;
+  getRelatives: () => Relatives;
+  setRelatives: (configs: Record<string, ComputeRelative>) => Relatives;
+  removeRelative: (name: string) => void;
+  addRelative: (name: string, compute: ComputeRelative) => RemoveRelative;
+  watchRelatives: (listener: (relatives: Relatives) => void, options?: WatchOptions) => StopWatch;
+  watchRelative: (name: string, listener: (relative: Relative) => void, options?: WatchOptions) => StopWatch;
+  watch: (listener: () => void) => StopWatch;
+  validate: (filedNames: string[]) => Promise<boolean>;
+  reset: () => void;
+}
+
+export default function createForm(formOptions?: FormOptions): Form {
   formOptions = formOptions || {}
   const initalFields = formOptions.fields || []
   const initialRelativeConfigs = formOptions.relatives || {}
@@ -237,7 +276,7 @@ export default function createForm(formOptions?: FormOptions) {
       return valid
     })
   }
-  
+
   const reset = () => {
     const fieldsData = getFieldsData(fields)
     setValues(fieldsData.values)
