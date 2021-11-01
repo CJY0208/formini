@@ -67,7 +67,7 @@ export interface Form {
   watchRelatives: (listener: (relatives: Relatives) => void, options?: WatchOptions) => StopWatch;
   watchRelative: (name: string, listener: (relative: Relative) => void, options?: WatchOptions) => StopWatch;
   watch: (listener: () => void) => StopWatch;
-  validate: (filedNames: string[] | string) => Promise<boolean>;
+  validate: (filedNames?: string[] | string) => Promise<boolean>;
   reset: () => void;
 }
 
