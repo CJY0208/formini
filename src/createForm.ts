@@ -7,6 +7,7 @@ import {
   getEventListener,
   isFunction,
   objectAssign,
+  objectEntries,
   defineProperty,
   concat,
 } from './helpers'
@@ -21,6 +22,12 @@ export type Rule = (value, values) => Promise<any> | any
 
 export interface Field {
   name: string
+  defaultValue?: any
+  rules?: Rule[]
+}
+
+interface OverridedField {
+  name?: string
   defaultValue?: any
   rules?: Rule[]
 }
@@ -59,6 +66,10 @@ export interface Form {
   setFields: (nextFields: FormOptions['fields']) => void;
   removeField: (fieldName: string) => void;
   addField: (field: Field) => () => void;
+  getField: (fieldName: string) => Field | void;
+  setField: (fieldName, field: OverridedField) => void;
+  hasField: (fieldName: string) => boolean;
+  setFieldValues: (values: Values) => void;
   getRelative: (name: string) => Relative;
   getRelatives: () => Relatives;
   setRelatives: (configs: Record<string, ComputeRelative>) => void;
@@ -157,6 +168,33 @@ export default function createForm(formOptions?: FormOptions): Form {
   const addField = (field) => {
     setFields(concat(getFields(), field))
     return () => removeField(field.name)
+  }
+  const getField = (fieldName) => {
+    const fields = getFields()
+    const field = fields?.find((field) => field.name === name)
+    return field
+  }
+  const setField = (fieldName, fieldConfig) => {
+    const field = getField(fieldName)
+    if (!field) {
+      objectAssign(field, fieldConfig)
+      setFields(fields)
+    } else {
+      addField(objectAssign({ name: fieldName }, fieldConfig))
+    }
+  }
+  const hasField = (fieldName) => !!getField(fieldName)
+  const setFieldValues = values => {
+    const fields = objectEntries(values).map(([name]) => {
+      const currentField = getField(name)
+      if (currentField) {
+        return currentField
+      }
+
+      return { name }
+    })
+    setFields(fields)
+    setValues(values)
   }
   // ----------------------- fields 相关 end ------------------------------
 
@@ -303,6 +341,10 @@ export default function createForm(formOptions?: FormOptions): Form {
     setFields,
     removeField,
     addField,
+    getField,
+    setField,
+    hasField,
+    setFieldValues,
 
     getRelative,
     getRelatives,

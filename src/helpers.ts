@@ -6,6 +6,7 @@ type Mapper = (...args: any[]) => {
 
 export const concat = Array.prototype.concat.bind([])
 export const objectAssign = Object.assign
+export const objectEntries = Object.entries
 export const defineProperty = (obj, key, value) => {
   obj[key] = value
   return obj
