@@ -171,7 +171,7 @@ export default function createForm(formOptions?: FormOptions): Form {
   }
   const getField = (fieldName) => {
     const fields = getFields()
-    const field = fields?.find((field) => field.name === name)
+    const field = fields?.find((field) => field.name === fieldName)
     return field
   }
   const setField = (fieldName, fieldConfig) => {
