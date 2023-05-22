@@ -176,7 +176,7 @@ export default function createForm(formOptions?: FormOptions): Form {
   }
   const setField = (fieldName, fieldConfig) => {
     const field = getField(fieldName)
-    if (!field) {
+    if (!!field) {
       objectAssign(field, fieldConfig)
       setFields(fields)
     } else {
